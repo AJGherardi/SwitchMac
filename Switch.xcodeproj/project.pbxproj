@@ -13,6 +13,8 @@
 		117578AC26A60B600039A054 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 117578AB26A60B600039A054 /* Preview Assets.xcassets */; };
 		117578B826A60B600039A054 /* SwitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117578B726A60B600039A054 /* SwitchTests.swift */; };
 		117578C326A60B600039A054 /* SwitchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117578C226A60B600039A054 /* SwitchUITests.swift */; };
+		117578D326A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 117578D226A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp */; };
+		117578D626A60B8C0039A054 /* BMDSwitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 117578D526A60B8C0039A054 /* BMDSwitcher.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -46,6 +48,11 @@
 		117578BE26A60B600039A054 /* SwitchUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SwitchUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		117578C226A60B600039A054 /* SwitchUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwitchUITests.swift; sourceTree = "<group>"; };
 		117578C426A60B600039A054 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		117578D026A60B7D0039A054 /* Switch-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Switch-Bridging-Header.h"; sourceTree = "<group>"; };
+		117578D126A60B7E0039A054 /* BMDSwitcherAPI.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMDSwitcherAPI.h; sourceTree = "<group>"; };
+		117578D226A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = BMDSwitcherAPIDispatch.cpp; sourceTree = "<group>"; };
+		117578D426A60B8C0039A054 /* BMDSwitcher.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = BMDSwitcher.h; sourceTree = "<group>"; };
+		117578D526A60B8C0039A054 /* BMDSwitcher.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = BMDSwitcher.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,9 +106,14 @@
 				117578A426A60B5F0039A054 /* SwitchApp.swift */,
 				117578A626A60B5F0039A054 /* ContentView.swift */,
 				117578A826A60B600039A054 /* Assets.xcassets */,
+				117578D126A60B7E0039A054 /* BMDSwitcherAPI.h */,
+				117578D226A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp */,
+				117578D426A60B8C0039A054 /* BMDSwitcher.h */,
+				117578D526A60B8C0039A054 /* BMDSwitcher.mm */,
 				117578AD26A60B600039A054 /* Info.plist */,
 				117578AE26A60B600039A054 /* Switch.entitlements */,
 				117578AA26A60B600039A054 /* Preview Content */,
+				117578D026A60B7D0039A054 /* Switch-Bridging-Header.h */,
 			);
 			path = Switch;
 			sourceTree = "<group>";
@@ -199,6 +211,7 @@
 				TargetAttributes = {
 					117578A026A60B5F0039A054 = {
 						CreatedOnToolsVersion = 12.5.1;
+						LastSwiftMigration = 1250;
 					};
 					117578B226A60B600039A054 = {
 						CreatedOnToolsVersion = 12.5.1;
@@ -263,6 +276,8 @@
 			files = (
 				117578A726A60B5F0039A054 /* ContentView.swift in Sources */,
 				117578A526A60B5F0039A054 /* SwitchApp.swift in Sources */,
+				117578D626A60B8C0039A054 /* BMDSwitcher.mm in Sources */,
+				117578D326A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -418,6 +433,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Switch/Switch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -433,6 +449,8 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexandergherardi.Switch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Switch/Switch-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Debug;
@@ -442,6 +460,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Switch/Switch.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				COMBINE_HIDPI_IMAGES = YES;
@@ -457,6 +476,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 11.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexandergherardi.Switch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "Switch/Switch-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 			};
 			name = Release;

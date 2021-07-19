@@ -8,9 +8,18 @@
 import SwiftUI
 
 struct ContentView: View {
+    func setupATEM() -> UInt32 {
+        let failure = BMDSwitcher.connect()
+        print(failure)
+        return failure;
+    }
+    
+    init() {
+        self.setupATEM()
+    }
+    
     var body: some View {
-        Text("Hello, world!")
-            .padding()
+        Text("The Switcher (BETA/INCOMPLETE)")
     }
 }
 
