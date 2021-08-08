@@ -14,7 +14,7 @@
 		117578B826A60B600039A054 /* SwitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117578B726A60B600039A054 /* SwitchTests.swift */; };
 		117578C326A60B600039A054 /* SwitchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117578C226A60B600039A054 /* SwitchUITests.swift */; };
 		117578D326A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 117578D226A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp */; };
-		117578D626A60B8C0039A054 /* BMDSwitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 117578D526A60B8C0039A054 /* BMDSwitcher.mm */; };
+		117CFFC026BE0EFF005AC8E2 /* BMDSwitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 117578D526A60B8C0039A054 /* BMDSwitcher.mm */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -276,7 +276,7 @@
 			files = (
 				117578A726A60B5F0039A054 /* ContentView.swift in Sources */,
 				117578A526A60B5F0039A054 /* SwitchApp.swift in Sources */,
-				117578D626A60B8C0039A054 /* BMDSwitcher.mm in Sources */,
+				117CFFC026BE0EFF005AC8E2 /* BMDSwitcher.mm in Sources */,
 				117578D326A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -446,7 +446,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexandergherardi.Switch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Switch/Switch-Bridging-Header.h";
@@ -473,7 +473,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 11.0;
+				MACOSX_DEPLOYMENT_TARGET = 11.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.alexandergherardi.Switch;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_OBJC_BRIDGING_HEADER = "Switch/Switch-Bridging-Header.h";
