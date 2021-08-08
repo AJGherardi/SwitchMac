@@ -20,6 +20,11 @@
     HRESULT result;
     IBMDSwitcherInputIterator *inputIterator = NULL;
 
+    // Make sure that a switcher object has been obtained
+    if (switcher == NULL) {
+        return NULL;
+    }
+
     // Storage for status objects
     NSMutableArray<InputStatus *> *statuses = [NSMutableArray array];
 
@@ -45,12 +50,14 @@
             // Release input for next iteration
             input->Release();
 
-            // Create status object
-            InputStatus *status = [[InputStatus alloc] init];
-            status.inputId = *inputId;
-            status.isPreview = *preview;
-            status.isProgram = *program;
-            [statuses addObject:status];
+            // Create status object if all needed values are provided
+            if (inputId == NULL || preview == NULL || program == NULL) {
+                InputStatus *status = [[InputStatus alloc] init];
+                status.inputId = *inputId;
+                status.isPreview = *preview;
+                status.isProgram = *program;
+                [statuses addObject:status];
+            }
         }
 
         // Release input iterator

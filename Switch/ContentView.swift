@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import ORSSerial
 
 struct ContentView: View {
     @State var switcher = BMDSwitcher()
@@ -14,13 +15,16 @@ struct ContentView: View {
     @State var showDetails = false
 
     func turnOn() {
-        // TODO: Get tally light file at runtime
-        let fileDescriptor = open("/dev/cu.usbmodemTODO1", O_RDWR | O_NOCTTY | O_NONBLOCK);
-        if fileDescriptor == -1 {
-            print("failed to open port")
-            return
+        let ports = ORSSerialPortManager.shared().availablePorts
+        for port in ports {
+            // Ignore bluetooth related port
+            if port.name == "Bluetooth-Incoming-Port" {
+                continue
+            }
+            port.open()
+            port.send("on\n".data(using: .utf8)!)
+            port.close()
         }
-        write(fileDescriptor, "on\n", 4)
     }
 
     var body: some View {

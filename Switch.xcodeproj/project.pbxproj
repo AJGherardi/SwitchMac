@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -14,6 +14,7 @@
 		117578B826A60B600039A054 /* SwitchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117578B726A60B600039A054 /* SwitchTests.swift */; };
 		117578C326A60B600039A054 /* SwitchUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 117578C226A60B600039A054 /* SwitchUITests.swift */; };
 		117578D326A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 117578D226A60B7E0039A054 /* BMDSwitcherAPIDispatch.cpp */; };
+		1179D09526BF8643001A33AA /* ORSSerial in Frameworks */ = {isa = PBXBuildFile; productRef = 1179D09426BF8643001A33AA /* ORSSerial */; };
 		117CFFC026BE0EFF005AC8E2 /* BMDSwitcher.mm in Sources */ = {isa = PBXBuildFile; fileRef = 117578D526A60B8C0039A054 /* BMDSwitcher.mm */; };
 /* End PBXBuildFile section */
 
@@ -60,6 +61,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1179D09526BF8643001A33AA /* ORSSerial in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -160,6 +162,9 @@
 			dependencies = (
 			);
 			name = Switch;
+			packageProductDependencies = (
+				1179D09426BF8643001A33AA /* ORSSerial */,
+			);
 			productName = Switch;
 			productReference = 117578A126A60B5F0039A054 /* Switch.app */;
 			productType = "com.apple.product-type.application";
@@ -232,6 +237,9 @@
 				Base,
 			);
 			mainGroup = 1175789826A60B5F0039A054;
+			packageReferences = (
+				1179D09326BF8643001A33AA /* XCRemoteSwiftPackageReference "ORSSerialPort" */,
+			);
 			productRefGroup = 117578A226A60B5F0039A054 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -605,6 +613,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1179D09326BF8643001A33AA /* XCRemoteSwiftPackageReference "ORSSerialPort" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/armadsen/ORSSerialPort.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.1.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1179D09426BF8643001A33AA /* ORSSerial */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1179D09326BF8643001A33AA /* XCRemoteSwiftPackageReference "ORSSerialPort" */;
+			productName = ORSSerial;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1175789926A60B5F0039A054 /* Project object */;
 }
