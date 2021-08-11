@@ -1,5 +1,6 @@
 #import "BMDSwitcher.h"
 
+
 @implementation InputStatus
 
 @end
@@ -9,16 +10,22 @@
 }
 
 - (unsigned int)connect:(NSString *)addr {
+    HRESULT result;
+
     IBMDSwitcherDiscovery *discovery = CreateBMDSwitcherDiscoveryInstance();
     BMDSwitcherConnectToFailure connectToFailReason;
-    discovery->ConnectTo((__bridge CFStringRef) addr, &switcher, &connectToFailReason);
+    result = discovery->ConnectTo((__bridge CFStringRef) addr, &switcher, &connectToFailReason);
     discovery->Release();
+    if (result != S_OK) {
+        connectToFailReason = 0;
+    }
+
     return connectToFailReason;
 }
 
 - (NSArray<InputStatus *> *)getInputs {
     HRESULT result;
-    IBMDSwitcherInputIterator *inputIterator = NULL;
+    IBMDSwitcherInputIterator *inputIterator;
 
     // Make sure that a switcher object has been obtained
     if (switcher == NULL) {
@@ -38,24 +45,23 @@
         // Iterate though all inputs
         while (S_OK == inputIterator->Next(&input)) {
             // Storage for tally and id info
-            BMDSwitcherInputId *inputId = NULL;
-            bool *preview = NULL;
-            bool *program = NULL;
+            BMDSwitcherInputId inputId;
+            bool preview;
+            bool program;
 
             // Get tally info and id
-            input->IsPreviewTallied(preview);
-            input->IsProgramTallied(program);
-            input->GetInputId(inputId);
-
+            input->GetInputId(&inputId);
+            input->IsPreviewTallied(&preview);
+            input->IsProgramTallied(&program);
             // Release input for next iteration
             input->Release();
 
             // Create status object if all needed values are provided
-            if (inputId == NULL || preview == NULL || program == NULL) {
+            if (inputId != NULL || preview != NULL || program != NULL) {
                 InputStatus *status = [[InputStatus alloc] init];
-                status.inputId = *inputId;
-                status.isPreview = *preview;
-                status.isProgram = *program;
+                status.inputId = inputId;
+                status.isPreview = preview;
+                status.isProgram = program;
                 [statuses addObject:status];
             }
         }

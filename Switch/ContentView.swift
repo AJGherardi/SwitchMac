@@ -40,12 +40,11 @@ struct ContentView: View {
                 Button(action: {
                     // Connect to switcher
                     let result = switcher.connect(ipAddr)
-                    print(result)
-                    self.statusText = String(result)
-
-                    // Show tally config details
-                    withAnimation {
-                        showDetails.toggle()
+                    if result == 0 {
+                        // Show tally config details
+                        withAnimation {
+                            showDetails.toggle()
+                        }
                     }
                 }) {
                     Text("Connect")
@@ -55,6 +54,9 @@ struct ContentView: View {
                     if let inputStatuses = switcher.getInputs() {
                         for status in inputStatuses {
                             print("ID: " + String(status.inputId) + " IsPreview: " + String(status.isPreview) + " IsProgram: " + String(status.isProgram))
+                            if status.inputId == 1 && status.isProgram == true {
+                                turnOn()
+                            }
                         }
                     }
                 }) {
