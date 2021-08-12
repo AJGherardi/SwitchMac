@@ -13,8 +13,10 @@ struct ContentView: View {
     @State var statusText: String = "Not Connected"
     @State var ipAddr: String = "0.0.0.0"
     @State var showDetails = false
+    @State var status = false
+    @State var selectedInput = 1
 
-    func turnOn() {
+    func setTallyState(on: Bool) {
         let ports = ORSSerialPortManager.shared().availablePorts
         for port in ports {
             // Ignore bluetooth related port
@@ -22,7 +24,12 @@ struct ContentView: View {
                 continue
             }
             port.open()
-            port.send("on\n".data(using: .utf8)!)
+            // Set state
+            if on == true {
+                port.send("on\n".data(using: .utf8)!)
+            } else {
+                port.send("off\n".data(using: .utf8)!)
+            }
             port.close()
         }
     }
@@ -51,15 +58,14 @@ struct ContentView: View {
                 }.padding(10)
             } else {
                 Button(action: {
-                    if let inputStatuses = switcher.getInputs() {
-                        for status in inputStatuses {
-                            print("ID: " + String(status.inputId) + " IsPreview: " + String(status.isPreview) + " IsProgram: " + String(status.isProgram))
-                            if status.inputId == 1 && status.isProgram == true {
-                                turnOn()
-                            }
+                    status.toggle()
+                    switcher.getInputs({ (status: InputStatus?) -> Void in
+                        if let status = status {
+                            setTallyState(on: status.isProgram)
                         }
-                    }
-                }) {
+                    })
+                }
+                ) {
                     Text("Get Status")
                 }.padding(10)
             }

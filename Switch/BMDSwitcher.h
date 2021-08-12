@@ -11,6 +11,7 @@
 @end
 
 @interface BMDSwitcher : NSObject
-- (unsigned int)connect: (NSString *)addr;
-- (NSArray<InputStatus*>*)getInputs;
+- (unsigned int)connect:(NSString *)addr;
+
+- (void)getInputs:(void (^)(InputStatus *))callback;
 @end
