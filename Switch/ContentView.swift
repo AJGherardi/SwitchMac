@@ -61,7 +61,9 @@ struct ContentView: View {
                     status.toggle()
                     switcher.getInputs({ (status: InputStatus?) -> Void in
                         if let status = status {
-                            setTallyState(on: status.isProgram)
+                            if status.inputId == 1 {
+                                setTallyState(on: status.isProgram)
+                            }
                         }
                     })
                 }

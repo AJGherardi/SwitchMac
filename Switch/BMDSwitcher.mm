@@ -10,10 +10,10 @@ static inline bool operator==(const REFIID &iid1, const REFIID &iid2) {
 class InputMonitor : public IBMDSwitcherInputCallback {
 public:
     // Constructor for InputMonitor class
-    InputMonitor(IBMDSwitcherInput *input, void(^callback)(InputStatus *)) : mInput(input), mRefCount(1) {
+    InputMonitor(IBMDSwitcherInput *input, void(^callback)(InputStatus *))
+            : mInput(input), mRefCount(1), mCallback(callback) {
         mInput->AddRef();
         mInput->AddCallback(this);
-        mCallback = callback;
     }
 
 protected:
@@ -61,7 +61,7 @@ public:
     }
 
     HRESULT Notify(BMDSwitcherInputEventType eventType) {
-        if (eventType == bmdSwitcherInputEventTypeIsPreviewTalliedChanged || eventType == bmdSwitcherInputEventTypeIsProgramTalliedChanged) {
+        if (eventType == bmdSwitcherInputEventTypeIsProgramTalliedChanged || eventType == bmdSwitcherInputEventTypeIsPreviewTalliedChanged) {
             // Storage for tally and id info
             BMDSwitcherInputId inputId = NULL;
             bool preview;
@@ -77,7 +77,10 @@ public:
             status.inputId = inputId;
             status.isPreview = preview;
             status.isProgram = program;
-            mCallback(status);
+
+            dispatch_sync(dispatch_get_main_queue(), ^{
+                mCallback(status);
+            });
         }
 
         return S_OK;
@@ -136,9 +139,6 @@ private:
         while (S_OK == inputIterator->Next(&input)) {
             // Create input monitor
             InputMonitor *inputMonitor = new InputMonitor(input, callback);
-
-            // Pass callback to input
-            input->AddCallback(inputMonitor);
 
             // Release input for next iteration
             input->Release();
