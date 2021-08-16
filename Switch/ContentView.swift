@@ -10,25 +10,29 @@ import ORSSerial
 
 struct ContentView: View {
     @State var switcher = BMDSwitcher()
-    @State var statusText: String = "Not Connected"
-    @State var ipAddr: String = "0.0.0.0"
     @State var showDetails = false
-    @State var status = false
-    @State var selectedInput = 1
+    @State var live = false
+    @AppStorage("ipAddr") var ipAddr: String = "0.0.0.0"
+    @AppStorage("inputs") var inputs: [String] = ["Disabled", "Disabled", "Disabled", "Disabled", "Disabled"]
 
-    func setTallyState(on: Bool) {
-        let ports = ORSSerialPortManager.shared().availablePorts
-        for port in ports {
+    func setTallyState(path: String, prev: Bool, prog: Bool) {
+        if let port = ORSSerialPort(path: path) {
             // Ignore bluetooth related port
             if port.name == "Bluetooth-Incoming-Port" {
-                continue
+                return
             }
             port.open()
             // Set state
-            if on == true {
-                port.send("on\n".data(using: .utf8)!)
+            if prev == true {
+                port.send("prev_on\n".data(using: .utf8)!)
             } else {
-                port.send("off\n".data(using: .utf8)!)
+                port.send("prev_off\n".data(using: .utf8)!)
+            }
+            usleep(10000)
+            if prog == true {
+                port.send("prog_on\n".data(using: .utf8)!)
+            } else {
+                port.send("prog_off\n".data(using: .utf8)!)
             }
             port.close()
         }
@@ -37,7 +41,7 @@ struct ContentView: View {
     var body: some View {
         VStack(alignment: .leading) {
             if !showDetails {
-                Text("Status: " + statusText).padding(10)
+                Text("Connect to continue")
                 TextField(
                         "Ip address",
                         text: $ipAddr
@@ -50,35 +54,85 @@ struct ContentView: View {
                     if result == 0 {
                         // Show tally config details
                         withAnimation {
-                            showDetails.toggle()
+                            showDetails = true
                         }
                     }
                 }) {
                     Text("Connect")
                 }.padding(10)
             } else {
-                Button(action: {
-                    status.toggle()
-                    switcher.getInputs({ (status: InputStatus?) -> Void in
-                        if let status = status {
-                            if status.inputId == 1 {
-                                setTallyState(on: status.isProgram)
+                List {
+                    ForEach(0..<inputs.count, id: \.self) { inputNum in
+                        VStack {
+                            Picker(selection: $inputs[inputNum], label: Text("Input \(inputNum)")) {
+                                Text("Disabled").tag("Disabled")
+                                ForEach(ORSSerialPortManager.shared().availablePorts, id: \.self) { port in
+                                    Text(port.path).tag(port.path)
+                                }
                             }
                         }
-                    })
+                    }
                 }
-                ) {
-                    Text("Get Status")
-                }.padding(10)
+                if live == false {
+                    Button(action: {
+                        switcher.getInputs({ (status: InputStatus?) -> Void in
+                            if let status = status {
+                                if status.inputId < inputs.count {
+                                    let path = inputs[Int(status.inputId)]
+                                    if path != "Disabled" {
+                                        setTallyState(path: path, prev: status.isPreview, prog: status.isProgram)
+                                    }
+                                }
+                            }
+                        })
+                        withAnimation {
+                            live = true
+                        }
+                    }
+                    ) {
+                        Text("Go Live")
+                    }
+                            .padding(10)
+                } else {
+                    Button(action: {}) {
+                        Text("⚪ Live")
+                    }
+                            .background(Color.red)
+                            .foregroundColor(Color.white)
+                            .cornerRadius(10)
+                            .disabled(true)
+                            .padding(10)
+
+                }
             }
         }
                 .padding(50)
-                .frame(maxWidth: 500)
+                .frame(maxWidth: 500, maxHeight: 1000)
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         ContentView()
+    }
+}
+
+extension Array: RawRepresentable where Element: Codable {
+    public init?(rawValue: String) {
+        guard let data = rawValue.data(using: .utf8),
+              let result = try? JSONDecoder().decode([Element].self, from: data)
+                else {
+            return nil
+        }
+        self = result
+    }
+
+    public var rawValue: String {
+        guard let data = try? JSONEncoder().encode(self),
+              let result = String(data: data, encoding: .utf8)
+                else {
+            return "[]"
+        }
+        return result
     }
 }

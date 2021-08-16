@@ -112,7 +112,7 @@ private:
     BMDSwitcherConnectToFailure connectToFailReason;
     result = discovery->ConnectTo((__bridge CFStringRef) addr, &mSwitcher, &connectToFailReason);
     discovery->Release();
-    if (result != S_OK) {
+    if (result == S_OK) {
         connectToFailReason = 0;
     }
 
