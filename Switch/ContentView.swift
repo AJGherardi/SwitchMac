@@ -14,8 +14,11 @@ struct ContentView: View {
     @State var live = false
     @AppStorage("ipAddr") var ipAddr: String = "0.0.0.0"
     @AppStorage("inputs") var inputs: [String] = ["Disabled", "Disabled", "Disabled", "Disabled", "Disabled"]
+    @AppStorage("F") var frontB: [String] = ["0", "0", "0", "0", "0"]
+    @AppStorage("p") var prevB: [String] = ["0", "0", "0", "0", "0"]
+    @AppStorage("P") var progB: [String] = ["0", "0", "0", "0", "0"]
 
-    func setTallyState(path: String, prev: Bool, prog: Bool) {
+    func setTallyState(path: String, id: Int, prev: Bool, prog: Bool) {
         if let port = ORSSerialPort(path: path) {
             // Ignore bluetooth related port
             if port.name == "Bluetooth-Incoming-Port" {
@@ -24,15 +27,19 @@ struct ContentView: View {
             port.open()
             // Set state
             if prev == true {
-                port.send("prev_on\n".data(using: .utf8)!)
+                port.send(("p|" + prevB[id]).data(using: .utf8)!)
             } else {
-                port.send("prev_off\n".data(using: .utf8)!)
+                port.send("p|0".data(using: .utf8)!)
             }
             usleep(10000)
             if prog == true {
-                port.send("prog_on\n".data(using: .utf8)!)
+                port.send(("P|" + progB[id]).data(using: .utf8)!)
+                usleep(10000)
+                port.send(("F|" + frontB[id]).data(using: .utf8)!)
             } else {
-                port.send("prog_off\n".data(using: .utf8)!)
+                port.send("P|0".data(using: .utf8)!)
+                usleep(10000)
+                port.send("F|0".data(using: .utf8)!)
             }
             port.close()
         }
@@ -70,6 +77,11 @@ struct ContentView: View {
                                     Text(port.path).tag(port.path)
                                 }
                             }
+                            HStack {
+                                TextField("Prev", text: $prevB[inputNum])
+                                TextField("Prog", text: $progB[inputNum])
+                                TextField("Front", text: $frontB[inputNum])
+                            }
                         }
                     }
                 }
@@ -80,7 +92,7 @@ struct ContentView: View {
                                 if status.inputId < inputs.count {
                                     let path = inputs[Int(status.inputId)]
                                     if path != "Disabled" {
-                                        setTallyState(path: path, prev: status.isPreview, prog: status.isProgram)
+                                        setTallyState(path: path, id: Int(status.inputId), prev: status.isPreview, prog: status.isProgram)
                                     }
                                 }
                             }
